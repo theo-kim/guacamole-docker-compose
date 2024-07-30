@@ -1,0 +1,13 @@
+.login-ui .login-dialog .logo {
+        background-image: url('app/ext/branding/images/logo.png');
+	width: 5em;
+	height: 5em;
+	-webkit-background-size: 5em 5em;
+}
+div.login-ui {
+	background: #575479;
+	background-color: #575479;
+}
+.login-ui .login-dialog {
+	background-color: #ffba87;
+}

@@ -4,7 +4,7 @@
 if ! (docker ps >/dev/null 2>&1)
 then
 	echo "docker daemon not running, will exit here!"
-	exit
+	# exit
 fi
 echo "Preparing folder init and creating ./init/initdb.sql"
 mkdir ./init >/dev/null 2>&1
