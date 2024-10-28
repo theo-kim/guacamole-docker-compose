@@ -93,6 +93,10 @@ networks:
   public:
     driver: bridge
 
+volumes:
+  tailscale_state:
+  open-webui:
+
 # services
 services:
   # VPN
@@ -105,15 +109,21 @@ services:
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY}
       TS_USERSPACE: 0
+      TS_STATE_DIR: /var/lib/tailscale
     cap_add:
     - net_admin
     - sys_module
     - net_raw 
+    volumes:
+    - tailscale_state:/var/lib/tailscale
     networks:
       private:
         priority: 10
       public:
         priority: 20 
+          # For open-webui
+    expose:
+      - 8080
 
 
   # guacd
@@ -125,6 +135,7 @@ services:
     volumes:
     - ./drive:/drive:rw
     - ./record:/record:rw
+    - ./fonts:/usr/share/fonts/ubuntu/
     depends_on:
     - tailscaled
   
@@ -197,3 +208,14 @@ services:
    - guacamole
    networks:
    - public
+
+  open-webui:
+    container_name: open-webui
+    restart: always
+    image: ghcr.io/open-webui/open-webui:latest
+    volumes:
+      - open-webui:/app/backend/data
+    environment:
+      - 'OLLAMA_BASE_URL=http://100.119.95.105:11434'
+      - 'WEBUI_URL=https://sunsetfrigate.dev/chat/'
+    network_mode: service:tailscaled
